@@ -1,93 +1,144 @@
-# trajectory_prediction
+# Trajectory Prediction with DESIRE & HiVT
 
+This repository contains the complete structure for a trajectory prediction pipeline using **DESIRE** and **HiVT**.  
+It covers **data preprocessing**, **frame extraction**, **BEV/raster generation**, **training**, and **evaluation**.
 
-
-## Getting started
-
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
-
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
-
-## Add your files
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+⚠️ **Important Notice**  
+The raw dataset **is not included** in this repository due to its large size.  
+Only cleaned CSV trajectory files and quality reports are included in:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.lrz.de/s-alatif/trajectory_prediction.git
-git branch -M main
-git push -uf origin main
+data/processed/
 ```
 
-## Integrate with your tools
+To run the full pipeline, you must **manually download the dataset** and insert it into the correct folder (see below).
 
-- [ ] [Set up project integrations](https://gitlab.lrz.de/s-alatif/trajectory_prediction/-/settings/integrations)
+---
 
-## Collaborate with your team
+## Repository Structure
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+```
+data/
+├── processed/
+│   ├── frames/                  # exported frames (from preprocessing)
+│   ├── quality_report.json      # data-quality inspection report
+│   └── trajectories.csv         # cleaned, standardized trajectories (included)
+│
+└── raw/
+    ├── annotated_frames/        # (empty until dataset is added)
+    ├── Scripts/                 # (empty)
+    ├── Trajectories/            # (empty)
+    └── Videos/                  # (empty)
+```
 
-## Test and Deploy
+Other project folders:
 
-Use the built-in continuous integration in GitLab.
+```
+configs/                         # YAML configs for DESIRE & HiVT
+experiments/                     # experiment setups & logs
+logs/                            # logging outputs and W&B links
+models/                          # trained model checkpoints (optional)
+notebooks/                       # exploratory data analysis
+scripts/
+│   ├── prepare_data.py          # raw data -> CSV + frame extraction
+│   ├── generate_bev.py          # BEV / raster generation
+│   └── evaluate.py              # ADE / FDE evaluation
+src/
+├── desire/                      # DESIRE implementation
+├── hivt/                        # HiVT implementation
+└── utils/                       # helper functions
+```
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+---
 
-***
+## Adding the Raw Dataset
 
-# Editing this README
+Because the raw dataset is too large, it must be downloaded separately from **Google Drive**.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+### **1. Download the dataset folder named:**
 
-## Suggestions for a good README
+```
+DATASET/
+```
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+This folder usually contains:
 
-## Name
-Choose a self-explaining name for your project.
+- Videos/  
+- Trajectories/  
+- Scripts/  
+- annotated_frames/  
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+### **2. Copy the contents of `DATASET/` into:**
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+```
+data/raw/
+```
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+The final structure should look like:
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+```
+data/raw/
+├── annotated_frames/
+├── Scripts/
+├── Trajectories/
+└── Videos/
+```
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Once these folders are added, the project is ready to run.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+---
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+## Running the Project
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### **1. Prepare the data**
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+```bash
+python scripts/prepare_data.py
+```
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+This script:
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+- loads raw data from `data/raw/`
+- extracts and synchronizes frames
+- generates cleaned CSV trajectory files
+- writes outputs into `data/processed/`
 
-## License
-For open source projects, say how it is licensed.
+### **2. Generate BEV / Raster Maps**
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+```bash
+python scripts/generate_bev.py
+```
+
+Used by DESIRE and HiVT to create map-based model inputs.
+
+### **3. Evaluate Model Performance**
+
+```bash
+python scripts/evaluate.py
+```
+
+Computes standard metrics:
+
+- ADE (Average Displacement Error)
+- FDE (Final Displacement Error)
+
+---
+
+## Current State
+
+- The preprocessing pipeline has already been executed before, and models were trained successfully.
+- This repository only contains:
+  - **cleaned trajectories (`trajectories.csv`)**
+  - **quality reports**
+  - **project code and structure**
+- To fully reproduce training, the raw dataset must be inserted into `data/raw/`.
+
+---
+
+## Notes
+
+- Scripts are intended to be executed on a **local high-performance machine**.
+- The structure is designed to fully separate raw data from processed outputs.
+- After inserting the data, the entire workflow (preprocessing → BEV generation → training → evaluation) can be reproduced.
+
+---
