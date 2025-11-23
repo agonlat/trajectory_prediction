@@ -154,11 +154,14 @@ def run(input_dir, out_dir, fmt):
 
     # B) Copy annotated frames
     print("Copying frames...")
-    for scene_dir in sorted(input_dir.glob("scene_*")):
-        jpg_folder = scene_dir / "frames"
-        if jpg_folder.exists():
-            out_frames = out_dir / "frames" / scene_dir.name
-            extract_frames_from_jpg(jpg_folder, out_frames)
+
+    annotated_root = input_dir / "annotated_frames"
+
+    for folder in sorted(annotated_root.iterdir()):
+        if folder.is_dir():
+            scene_id = folder.name.replace("Video ", "scene_")
+            out_frames = out_dir / "frames" / scene_id
+            extract_frames_from_jpg(folder, out_frames)
 
     # C) Quality report
     print("Creating quality report...")

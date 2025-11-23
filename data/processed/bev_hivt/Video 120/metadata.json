@@ -1,0 +1,12 @@
+{
+  "scene_id": "Video 120",
+  "img_size": 256,
+  "world_size_m": 40.0,
+  "meters_per_pixel": 0.15625,
+  "channels": 3,
+  "channel_description": [
+    "occupancy",
+    "vx",
+    "vy"
+  ]
+}
