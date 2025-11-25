@@ -1,7 +1,7 @@
-# Trajectory Prediction with DESIRE & HiVT
+# Trajectory Prediction Pipeline with Trajectron++ & Social-LSTM
 
-This repository contains the complete structure for a trajectory prediction pipeline using **DESIRE** and **HiVT**.  
-It covers **data preprocessing**, **frame extraction**, **BEV/raster generation**, **training**, and **evaluation**.
+This repository contains the complete structure for a trajectory prediction pipeline using **Trajectron++** and **Social-LSTM**.  
+It covers **data preprocessing**, **frame extraction**, **model-specific dataset building**, **training**, and **evaluation**.
 
 ⚠️ **Important Notice**  
 The raw dataset **is not included** in this repository due to its large size.  
@@ -11,7 +11,7 @@ Only cleaned CSV trajectory files and quality reports are included in:
 data/processed/
 ```
 
-To run the full pipeline, you must **manually download the dataset** and insert it into the correct folder (see below).
+To run the full pipeline, you must **manually download the dataset** and insert it into the correct folder.
 
 ---
 
@@ -22,7 +22,7 @@ data/
 ├── processed/
 │   ├── frames/                  # exported frames (from preprocessing)
 │   ├── quality_report.json      # data-quality inspection report
-│   └── trajectories.csv         # cleaned, standardized trajectories (included)
+│   └── trajectories.csv         # cleaned, standardized trajectories
 │
 └── raw/
     ├── annotated_frames/        # (empty until dataset is added)
@@ -34,19 +34,21 @@ data/
 Other project folders:
 
 ```
-configs/                         # YAML configs for DESIRE & HiVT
+configs/                         # YAML configs for models
 experiments/                     # experiment setups & logs
-logs/                            # logging outputs and W&B links
+logs/                            # logging outputs
 models/                          # trained model checkpoints (optional)
 notebooks/                       # exploratory data analysis
 scripts/
 │   ├── prepare_data.py          # raw data -> CSV + frame extraction
-│   ├── generate_bev.py          # BEV / raster generation
+│   ├── generate_bev.py          # BEV / raster generation (optional)
+│   ├── build_trajectronpp.py    # build Trajectron++ dataset
+│   ├── build_social_lstm.py     # build Social-LSTM dataset
 │   └── evaluate.py              # ADE / FDE evaluation
 src/
-├── desire/                      # DESIRE implementation
-├── hivt/                        # HiVT implementation
-└── utils/                       # helper functions
+├── trajectronpp/                # Trajectron++ implementation
+├── social_lstm/                 # Social-LSTM implementation
+└── utils/                        # helper functions
 ```
 
 ---
@@ -93,32 +95,47 @@ Once these folders are added, the project is ready to run.
 ### **1. Prepare the data**
 
 ```bash
-python scripts/prepare_data.py
+python scripts/prepare_data.py --input data/raw --out data/processed
 ```
 
 This script:
-
 - loads raw data from `data/raw/`
 - extracts and synchronizes frames
 - generates cleaned CSV trajectory files
 - writes outputs into `data/processed/`
 
-### **2. Generate BEV / Raster Maps**
+
+(Optional, used for map-based models if needed.)
+
+### **2. Build dataset for Trajectron++**
 
 ```bash
-python scripts/generate_bev.py
+python scripts/build_trajectronpp.py --input data/processed/trajectories.csv --out data/trajectronpp
 ```
 
-Used by DESIRE and HiVT to create map-based model inputs.
+This script:
+- normalizes coordinates
+- builds interaction graphs
+- saves `.pkl` files per scene
 
-### **3. Evaluate Model Performance**
+### **3. Build dataset for Social-LSTM**
+
+```bash
+python scripts/build_social_lstm.py --input data/processed/trajectories.csv --out data/social_lstm
+```
+
+This script:
+- creates observation/prediction sequences
+- pads missing agents
+- saves `.npy` arrays per scene
+
+### **4. Evaluate Model Performance**
 
 ```bash
 python scripts/evaluate.py
 ```
 
 Computes standard metrics:
-
 - ADE (Average Displacement Error)
 - FDE (Final Displacement Error)
 
@@ -126,19 +143,14 @@ Computes standard metrics:
 
 ## Current State
 
-- The preprocessing pipeline has already been executed before, and models were trained successfully.
-- This repository only contains:
-  - **cleaned trajectories (`trajectories.csv`)**
-  - **quality reports**
-  - **project code and structure**
-- To fully reproduce training, the raw dataset must be inserted into `data/raw/`.
+- Preprocessing is ready and CSV files exist.
+- Model-specific dataset scripts must be executed to prepare inputs for training.
+- Raw dataset must be inserted into `data/raw/` to fully reproduce training.
 
 ---
 
 ## Notes
 
 - Scripts are intended to be executed on a **local high-performance machine**.
-- The structure is designed to fully separate raw data from processed outputs.
-- After inserting the data, the entire workflow (preprocessing → BEV generation → training → evaluation) can be reproduced.
-
----
+- The structure separates raw data from processed outputs.
+- After inserting the data, the entire workflow (preprocessing → dataset build → training → evaluation) can be reproduced.
