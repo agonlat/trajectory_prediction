@@ -1,3 +1,6 @@
 [submodule "third_party/trajectronpp/third_party/trajectronpp"]
 	path = third_party/trajectronpp/third_party/trajectronpp
 	url = https://github.com/StanfordASL/Trajectron-plus-plus.git
+[submodule "social-lstm"]
+	path = social-lstm
+	url = https://github.com/quancore/social-lstm.git

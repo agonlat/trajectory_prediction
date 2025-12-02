@@ -1,3 +1,3 @@
 # Ignore EVERYTHING inside data/raw because the files are too large. 
 /data/raw/*
-/data/frames/*
+/data/processed/frames/*
