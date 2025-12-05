@@ -1,26 +1,42 @@
 #!/bin/bash
-set -e
-# 1. Update submodule (falls vorhanden)
-git submodule update --init --recursive || true
 
-# 2. Create conda env if not exists (optional)
-if ! conda env list | grep -q "trajectronpp"; then
-  echo "Creating conda env 'trajectronpp'..."
-  conda create -n trajectronpp python=3.8 -y
-  conda activate trajectronpp
-  pip install -r third_party/trajectronpp/requirements.txt || true
-else
-  conda activate trajectronpp
-fi
+# --- 1. SET PROJECT PATHS ---
+# Define the root directory of your project (where the trajectronpp submodule is located)
+PROJECT_ROOT=$(dirname "$0")/..
 
-# 3. Convert CSV -> PKL
-python scripts/build_trajectronpp.py --input data/processed/trajectories.csv --out data/processed/trajectronpp --threshold 6.0
+# Define paths to your custom files
+CONF_FILE="${PROJECT_ROOT}/experiments/custom_config.json"
+TRAIN_DATA="${PROJECT_ROOT}/data/processed_trajectronpp/custom_train.pkl"
+EVAL_DATA="${PROJECT_ROOT}/data/processed_trajectronpp/custom_val.pkl"
+LOG_DIR="${PROJECT_ROOT}/experiments/my_trajectron_run/models"
 
-# 4. Train (smoke test)
-cd third_party/trajectronpp/trajectron
-python train.py \
-  --train_data_dict ../../../data/processed/trajectronpp/trajectron_train.pkl \
-  --eval_data_dict ../../../data/processed/trajectronpp/trajectron_val.pkl \
-  --offline_scene_graph yes \
-  --train_epochs 3 \
-  --log_dir ../../../experiments/models/trajectronpp_smoke
+# Define the path to the Trajectron++ train script inside the submodule
+TRAIN_SCRIPT="${PROJECT_ROOT}/trajectronpp/experiments/train.py"
+
+# --- 2. EXECUTION ---
+echo "Starting Trajectron++ Training with Custom Data..."
+echo "Configuration: ${CONF_FILE}"
+echo "Log Directory: ${LOG_DIR}"
+
+# Run the training command
+python "${TRAIN_SCRIPT}" \
+    \
+    # General Parameters
+    --eval_every 10 \
+    --vis_every 1 \
+    --train_epochs 100 \
+    --augment \
+    \
+    # Data and Configuration Paths
+    --train_data_dict "${TRAIN_DATA}" \
+    --eval_data_dict "${EVAL_DATA}" \
+    --conf "${CONF_FILE}" \
+    \
+    # Hardware and Processing Options
+    --offline_scene_graph yes \
+    --preprocess_workers 5 \
+    --log_dir "${LOG_DIR}" \
+    --log_tag _video_data_si \
+    --device cuda
+    
+echo "Training command executed."

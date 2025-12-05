@@ -1,0 +1,85 @@
+{
+    "scene_freq": 1,
+    "dt": 0.4,
+    "max_scene_size": 1200,
+    "data_format": [
+        "x",
+        "y"
+    ],
+    "standardization": {
+        "car": {
+            "x": {
+                "mean": 450.05166583065613,
+                "std": 321.44242438692817
+            },
+            "y": {
+                "mean": 249.00629230283326,
+                "std": 149.66903647372732
+            }
+        },
+        "truck": {
+            "x": {
+                "mean": 450.05166583065613,
+                "std": 321.44242438692817
+            },
+            "y": {
+                "mean": 249.00629230283326,
+                "std": 149.66903647372732
+            }
+        }
+    },
+    "edge_types": [
+        {
+            "hierarchy": 1,
+            "primary": "car",
+            "secondary": "car",
+            "name": "c_c"
+        },
+        {
+            "hierarchy": 1,
+            "primary": "truck",
+            "secondary": "truck",
+            "name": "t_t"
+        },
+        {
+            "hierarchy": 1,
+            "primary": "car",
+            "secondary": "truck",
+            "name": "c_t"
+        },
+        {
+            "hierarchy": 1,
+            "primary": "truck",
+            "secondary": "car",
+            "name": "t_c"
+        }
+    ],
+    "node_type_parameters": {
+        "car": {
+            "model_type": "trajectron.model.Trajectron",
+            "dynamic_model": "SingleIntegrator",
+            "prediction_horizon": 12,
+            "history_len": 8,
+            "state_format": "x,y",
+            "state_length": 2,
+            "output_states": [
+                "x",
+                "y"
+            ],
+            "map_encoder": null
+        },
+        "truck": {
+            "model_type": "trajectron.model.Trajectron",
+            "dynamic_model": "SingleIntegrator",
+            "prediction_horizon": 12,
+            "history_len": 8,
+            "state_format": "x,y",
+            "state_length": 2,
+            "output_states": [
+                "x",
+                "y"
+            ],
+            "map_encoder": null
+        }
+    }
+}

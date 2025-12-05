@@ -1,0 +1,2 @@
+bicycle, bus, car, motorcycle, person, truck
+['BICYCLE', 'BUS', 'CAR', 'MOTORCYCLE', 'PERSON', 'TRUCK']
