@@ -1,0 +1,13 @@
+# Ignoriere virtuellen Environment-Ordner
+venv/
+
+# Ignoriere alle Rohdaten-Videos
+data/raw/
+
+# Ignoriere alle Frame-Dateien
+data/processed/frames/
+
+# Optional: Ignoriere große Binaries
+*.dll
+*.lib
+*.pyd
