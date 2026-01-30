@@ -7,17 +7,17 @@ from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import dill
 
-# =============================
-# CONFIG (HIER MUSS ES STIMMEN)
-# =============================
+
+# CONFIG
+
 DT = 0.4
 HISTORY_LENGTH = 8
 PREDICTION_HORIZON = 6
 MIN_NODE_LENGTH = HISTORY_LENGTH + PREDICTION_HORIZON
 
-# =============================
+
 # PATHS
-# =============================
+
 ROOT_DIR = os.getcwd()
 TRAJECTRON_PATH = os.path.join(ROOT_DIR, 'trajectronpp', 'trajectron')
 sys.path.insert(0, TRAJECTRON_PATH)
@@ -26,18 +26,18 @@ RAW_DATA_DIR = os.path.join(ROOT_DIR, 'data', 'raw', 'Trajectories')
 PROCESSED_DATA_DIR = os.path.join(ROOT_DIR, 'data', 'processed_trajectronpp')
 os.makedirs(PROCESSED_DATA_DIR, exist_ok=True)
 
-# =============================
+
 # LOAD CLASSES
-# =============================
+
 DETECTED_CLASSES_FILE = os.path.join(ROOT_DIR, 'detected_classes.txt')
 with open(DETECTED_CLASSES_FILE, 'r') as f:
     NODE_TYPE_LIST = [l.strip().lower() for l in f if l.strip()]
 
 print(f"Detected classes: {NODE_TYPE_LIST}")
 
-# =============================
+
 # TRAJECTRON IMPORTS
-# =============================
+
 from environment.node_type import NodeTypeEnum
 from environment.scene import Scene
 from environment.node import Node
@@ -45,9 +45,9 @@ from environment.environment import Environment
 
 NodeType = NodeTypeEnum(NODE_TYPE_LIST)
 
-# =============================
+
 # HELPERS
-# =============================
+
 def compute_derivatives(pos, dt):
     v = np.zeros_like(pos)
     a = np.zeros_like(pos)
@@ -65,9 +65,9 @@ def get_node_type(cls):
     return getattr(NodeType, cls, NodeType.car)
 
 
-# =============================
+
 # CREATE SCENE
-# =============================
+
 def create_scene(csv_path, scene_name):
     df = pd.read_csv(
     csv_path,
@@ -130,18 +130,18 @@ def create_scene(csv_path, scene_name):
     return scene
 
 
-# =============================
+
 # ATTENTION RADIUS
-# =============================
+
 attention_radius = {}
 for a in NodeType:
     for b in NodeType:
         attention_radius[(a.name, b.name)] = 30.0
 
 
-# =============================
+
 # STANDARDIZATION
-# =============================
+
 standardization = {
     nt: {
         'position': {'x': {'mean': 0.0, 'std': 50.0},
@@ -164,9 +164,9 @@ def make_env(scenes):
     return env
 
 
-# =============================
+
 # PROCESS ALL FILES
-# =============================
+
 files = sorted(glob.glob(os.path.join(RAW_DATA_DIR, "*.csv")))
 print(f"Found {len(files)} CSV files")
 
@@ -182,9 +182,9 @@ print(f"Created {len(scenes)} valid scenes")
 if len(scenes) < 10:
     print("⚠️ WARNING: Dataset is very small – evaluation may be unstable")
 
-# =============================
+
 # SPLIT & SAVE
-# =============================
+
 train, tmp = train_test_split(scenes, test_size=0.3, random_state=42)
 val, test = train_test_split(tmp, test_size=0.5, random_state=42)
 

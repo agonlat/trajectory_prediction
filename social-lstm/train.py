@@ -86,7 +86,7 @@ def main():
     parser.add_argument('--freq_optimizer', type=int, default=8,
                         help='Frequency number(epoch) of learning decay for optimizer')
     # store grids in epoch 0 and use further.2 times faster -> Intensive memory use around 12 GB
-    parser.add_argument('--grid', action="store_true", default=True,
+    parser.add_argument('--grid', action="store_true", default=False,
                         help='Whether store grids and use further epoch')
     
     args = parser.parse_args()
@@ -106,9 +106,11 @@ def train(args):
       f_prefix = 'drive/semester_project/social_lstm_final'
 
     
-    if not os.path.isdir("log/"):
-      print("Directory creation script is running...")
-      subprocess.call([f_prefix+'/make_directories.sh'])
+    # Create required directories (Windows-safe)
+    os.makedirs("log/SOCIALLSTM/LSTM", exist_ok=True)
+    os.makedirs("model/SOCIALLSTM/LSTM", exist_ok=True)
+    os.makedirs("plot/SOCIALLSTM/LSTM", exist_ok=True)
+
 
     args.freq_validation = np.clip(args.freq_validation, 0, args.num_epochs)
     validation_epoch_list = list(range(args.freq_validation, args.num_epochs+1, args.freq_validation))

@@ -362,6 +362,7 @@ def angle_between(p1, p2):
     return ((ang1 - ang2) % (2 * np.pi))
 
 def vectorize_seq(x_seq, PedsList_seq, lookup_seq):
+    x_seq = x_seq/100
     #substract first frame value to all frames for a ped.Therefore, convert absolute pos. to relative pos.
     first_values_dict = WriteOnceDict()
     vectorized_x_seq = x_seq.clone()

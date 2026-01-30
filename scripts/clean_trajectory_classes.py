@@ -3,17 +3,16 @@ import glob
 import pandas as pd
 from collections import Counter
 
-# =================================================
 # Paths
-# =================================================
+
 RAW_DATA_DIR = os.path.join("data", "raw", "Trajectories")
 CLEAN_DATA_DIR = os.path.join("data", "raw", "Trajectories_cleaned")
 
 os.makedirs(CLEAN_DATA_DIR, exist_ok=True)
 
-# =================================================
+
 # Canonical class set
-# =================================================
+
 CANONICAL_CLASSES = {
     "car",
     "truck",
@@ -23,9 +22,9 @@ CANONICAL_CLASSES = {
     "person"
 }
 
-# =================================================
+
 # Class normalization map (typos → canonical)
-# =================================================
+
 CLASS_MAP = {
     # cars
     "car": "car",
@@ -53,25 +52,23 @@ CLASS_MAP = {
     "bus": "bus"
 }
 
-# =================================================
+
 # Junk / invalid labels (drop entire tracks)
-# =================================================
 INVALID_CLASSES = {
     "12", "13762", "2", "51", "8", "v", "r", "ar"
 }
 
-# =================================================
+
 # Stats
-# =================================================
+
 global_before = Counter()
 global_after = Counter()
 dropped_tracks = 0
 kept_tracks = 0
 skipped_files = 0
 
-# =================================================
 # Cleaning loop
-# =================================================
+
 files = sorted(glob.glob(os.path.join(RAW_DATA_DIR, "*.csv")))
 print(f"Found {len(files)} CSV files")
 
