@@ -83,9 +83,9 @@ def main():
             convert_csv_to_txt(csv, out_path)
 
     print("\nAll data prepared successfully!")
-    print("📁Training scenes →", TRAIN_DIR)
-    print("📁Validation scenes →", VAL_DIR)
-    print("📁Test scenes →", TEST_DIR)
+    print("Training scenes →", TRAIN_DIR)
+    print("Validation scenes →", VAL_DIR)
+    print("Test scenes →", TEST_DIR)
 
 if __name__ == "__main__":
     main()

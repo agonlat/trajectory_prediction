@@ -1,11 +1,11 @@
 import os
 import pandas as pd
 
-# Adjust this path to the folder containing your CSV files
+
 RAW_DATA_DIR = './data/raw/Trajectories_cleaned'
 OUTPUT_FILE = 'detected_classes.txt'
 
-# Canonical classes you actually support
+# Canonical classes
 CANONICAL_CLASSES = [
     "bicycle",
     "bus",

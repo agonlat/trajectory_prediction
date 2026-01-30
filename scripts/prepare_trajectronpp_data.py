@@ -71,8 +71,8 @@ def get_node_type(cls):
 def create_scene(csv_path, scene_name):
     df = pd.read_csv(
     csv_path,
-    engine="python",      # robuster Parser
-    on_bad_lines="skip"   # kaputte Zeilen überspringen
+    engine="python",      
+    on_bad_lines="skip"   
 )
 
     if df.empty or 'frame' not in df or 'id' not in df:
