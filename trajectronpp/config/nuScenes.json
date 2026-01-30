@@ -8,7 +8,7 @@
   "min_learning_rate": 0.00001,
   "learning_decay_rate": 0.9999,
 
-  "prediction_horizon": 6,
+  "prediction_horizon": 4,
   "minimum_history_length": 1,
   "maximum_history_length": 8,
 

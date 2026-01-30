@@ -1,5 +1,4 @@
 {
-
   "batch_size": 256,
   "grad_clip": 1.0,
 
@@ -8,25 +7,12 @@
   "min_learning_rate": 0.00001,
   "learning_decay_rate": 0.9999,
 
-  "prediction_horizon": 12,
+  "prediction_horizon": 3,
   "minimum_history_length": 1,
   "maximum_history_length": 8,
 
-  "map_encoder": {
-    "PEDESTRIAN": {
-      "heading_state_index": 6,
-      "patch_size": [50, 10, 50, 90],
-      "map_channels": 3,
-      "hidden_channels": [10, 20, 10, 1],
-      "output_size": 32,
-      "masks": [5, 5, 5, 5],
-      "strides": [1, 1, 1, 1],
-      "dropout": 0.5
-    }
-  },
-
   "k": 1,
-  "k_eval": 1,
+  "k_eval": 25,
 
   "kl_min": 0.07,
   "kl_weight": 100.0,
@@ -38,6 +24,7 @@
   "rnn_kwargs": {
     "dropout_keep_prob": 0.75
   },
+
   "MLP_dropout_keep_prob": 0.9,
   "enc_rnn_dim_edge": 32,
   "enc_rnn_dim_edge_influence": 32,
@@ -64,27 +51,13 @@
   "z_logit_clip_crossover": 300,
   "z_logit_clip_divisor": 5,
 
-  "dynamic": {
-      "PEDESTRIAN": {
-        "name": "SingleIntegrator",
-        "distribution": true,
-        "limits": {}
-      }
-  },
+  "dynamic_edges": "yes",
+  "edge_influence_combine_method": "attention",
 
-  "state": {
-      "PEDESTRIAN": {
-      "position": ["x", "y"],
-      "velocity": ["x", "y"],
-      "acceleration": ["x", "y"]
-    }
-  },
+  "use_map_encoding": false,
+  "map_encoder": {},
 
-  "pred_state": {
-    "PEDESTRIAN": {
-      "position": ["x", "y"]
-    }
-  },
+  "incl_robot_node": false,
 
   "log_histograms": false
 }
