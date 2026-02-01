@@ -1,6 +1,2 @@
-bicycle
-bus
-car
-motorcycle
-person
-truck
+pedestrian
+vehicle

@@ -19,6 +19,8 @@ from model.model_utils import cyclical_lr
 from model.dataset import EnvironmentDataset, collate
 from tensorboardX import SummaryWriter
 # torch.autograd.set_detect_anomaly(True)
+import torch.distributions as td
+td.Distribution.set_default_validate_args(False)
 
 if not torch.cuda.is_available() or args.device == 'cpu':
     args.device = torch.device('cpu')

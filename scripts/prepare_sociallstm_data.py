@@ -4,9 +4,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 
-# CONFIG — adjust paths if needed
+# CONFIG 
 
-CSV_DIR = "data/raw/Trajectories"        # Folder with your CSV trajectory files
+CSV_DIR = "data/raw/Trajectories"        # Folder with CSV trajectory files
 SOCIAL_LSTM_DATA_DIR = "social-lstm/data"
 
 TRAIN_DIR = os.path.join(SOCIAL_LSTM_DATA_DIR, "train")
